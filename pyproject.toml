@@ -5,12 +5,12 @@ build-backend = "hatchling.build"
 [project]
 name = "pyxivapi"
 version = "0.6.0"
-description="An asynchronous Python client for XIVAPI",
+description="An asynchronous Python client for XIVAPI"
 readme = "README.md"
 requires-python = ">=3.10"
 license = "MIT"
 authors = [
-  { name = "Lethys", email = "seraymericbot@gmail.com" }
+  { name = "Lethys", email = "seraymericbot@gmail.com" },
   { name = "miichom", email = "hello@cammy.xyz" }
 ]
 keywords = ["xivapi", "final fantasy xiv", "ffxiv", "api client"]
