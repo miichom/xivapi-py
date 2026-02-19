@@ -1,0 +1,83 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "pyxivapi"
+version = "0.1.0"
+description = "A Python client for the XIVAPI v2 API."
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+authors = [
+  { name = "miichom", email = "hello@cammy.xyz" }
+]
+keywords = ["xivapi", "final fantasy xiv", "ffxiv", "api client"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
+  "License :: OSI Approved :: MIT License",
+  "Intended Audience :: Developers",
+  "Topic :: Software Development :: Libraries"
+]
+dependencies = [
+  "requests>=2.31.0",
+  "pydantic>=2.6.0"
+]
+
+[project.urls]
+Documentation = "https://github.com/miichom/pyxivapi#readme"
+Issues = "https://github.com/miichom/pyxivapi/issues"
+Source = "https://github.com/miichom/pyxivapi"
+
+[tool.hatch.envs.dev]
+dependencies = [
+  "pytest>=7.0",
+  "pytest-cov>=4.0",
+  "mypy>=1.0.0",
+  "ruff>=0.3.0",
+  "types-requests"
+]
+
+[tool.hatch.envs.dev.scripts]
+test = "pytest -v"
+lint = "ruff check src/pyxivapi"
+types = "mypy --install-types --non-interactive src/pyxivapi"
+
+[tool.coverage.run]
+source_pkgs = ["pyxivapi", "tests"]
+branch = true
+parallel = true
+
+[tool.coverage.paths]
+pyxivapi = ["src/pyxivapi", "*/pyxivapi/src/pyxivapi"]
+tests = ["tests", "*/pyxivapi/tests"]
+
+[tool.coverage.report]
+exclude_lines = [
+  "no cov",
+  "if __name__ == .__main__.:",
+  "if TYPE_CHECKING:"
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py38"
+
+[tool.mypy]
+python_version = "3.10"
+strict = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+
+[[tool.mypy.overrides]]
+module = "pyxivapi.lib.models"
+disable_error_code = ["assignment", "type-arg"]

@@ -1,150 +1,98 @@
 # pyxivapi
-An asynchronous Python client for XIVAPI
 
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/741f410aefad4fa69cc6925ff5d83b4b)](https://www.codacy.com/manual/Yandawl/xivapi-py?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=xivapi/xivapi-py&amp;utm_campaign=Badge_Grade)
-[![PyPI version](https://badge.fury.io/py/pyxivapi.svg)](https://badge.fury.io/py/pyxivapi)
-[![Python 3.6](https://img.shields.io/badge/python-3.6-green.svg)](https://www.python.org/downloads/release/python-360/)
+[![PyPI - Version](https://img.shields.io/pypi/v/pyxivapi.svg)](https://pypi.org/project/pyxivapi)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/pyxivapi.svg)](https://pypi.org/project/pyxivapi)
 
-## Requirements
-```python
-python>=3.6.0
-asyncio
-aiohttp
-```
+An asynchronous Python client library for working with [XIVAPI v2](https://v2.xivapi.com/), providing access to Final Fantasy XIV game data. It lets you fetch, search, and work with FFXIV data using a clean, modern Python interface.
+
+If you need help or run into any issues, please [open an issue](https://github.com/xivapi/xivapi-py/issues) on GitHub or join the [XIVAPI Discord server](https://discord.gg/MFFVHWC) for support.
 
 ## Installation
-```python
+
+```bash
 pip install pyxivapi
 ```
 
-## Supported API end points
+```py
+from pyxivapi import XIVAPI
 
-*   /character/search
-*   /character/id
-*   /freecompany/search
-*   /freecompany/id
-*   /linkshell/search
-*   /linkshell/id
-*   /pvpteam/search
-*   /pvpteam/id
-*   /index/search (e.g. recipe, item, action, pvpaction, mount, e.t.c.)
-*   /index/id
-*   /lore/search
-*   /lodestone/worldstatus
+# Basic instance
+xiv = XIVAPI()
 
-## Documentation
-<https://xivapi.com/docs/>
+# With options
+xiv_custom = XIVAPI(
+    version="7.0",   # specify game version
+    language="ja",   # ja, en, de, fr
+    verbose=True     # enable debug logging
+)
+```
 
-## Example
-```python
-import asyncio
-import logging
+## Basic Usage
 
-import aiohttp
-import pyxivapi
-from pyxivapi.models import Filter, Sort
+```py
+xiv.items.get(1)
+print(item["fields"]["Name"]) # "Gil" (or equivalent in your language)
+```
 
+```py
+params = { "query": 'Name~"gil"', "sheets": "Item" }
+results = xiv.search(params)
+print(results[0])
+"""
+Example output:
+{
+  "score": 1,
+  "sheet": "Item",
+  "row_id": 1,
+  "fields": {
+    "Icon": {
+      "id": 65002,
+      "path": "ui/icon/065000/065002.tex",
+      "path_hr1": "ui/icon/065000/065002_hr1.tex"
+    },
+    "Name": "Gil",
+    "Singular": "gil"
+  }
+}
+"""
+```
 
-async def fetch_example_results():
-    client = pyxivapi.XIVAPIClient(api_key="your_key_here")
+## Contributing
 
-    # Search Lodestone for a character
-    character = await client.character_search(
-        world="odin", 
-        forename="lethys", 
-        surname="lightpaw"
-    )
+Contributions of any kind are welcome - bug fixes, improvements, new features, or documentation updates.
 
-    # Get a character by Lodestone ID with extended data & include their Free Company information, if it has been synced.
-    character = await client.character_by_id(
-        lodestone_id=8255311, 
-        extended=True,
-        include_freecompany=True
-    )
+### Getting Started
 
-    # Search Lodestone for a free company
-    freecompany = await client.freecompany_search(
-        world="gilgamesh", 
-        name="Elysium"
-    )
+```bash
+git clone https://github.com/miichom/pyxivapi.git
+cd pyxivapi
+hatch env create dev
+```
 
-    # Item search with paging
-    item = await client.index_search(
-        name="Eden",
-        indexes=["Item"],
-        columns=["ID", "Name"],
-        filters=[
-            Filter("LevelItem", "gt", 520)
-        ],
-        sort=Sort("LevelItem", False),
-        page=0,
-        per_page=10
-    )
+### Run the checks:
 
-    # Fuzzy search XIVAPI game data for a recipe by name. Results will be in English.
-    recipe = await client.index_search(
-        name="Crimson Cider", 
-        indexes=["Recipe"], 
-        columns=["ID", "Name", "Icon", "ItemResult.Description"]
-    )
+```bash
+hatch run dev:lint
+hatch run dev:types
+hatch run dev:test
+```
 
-    # Fuzzy search XIVAPI game data for a recipe by name. Results will be in French.
-    recipe = await client.index_search(
-        name="Cidre carmin", 
-        indexes=["Recipe"], 
-        columns=["ID", "Name", "Icon", "ItemResult.Description"], 
-        language="fr"
-    )
+### Before Opening a PR
 
-    # Get an item by its ID (Omega Rod) and return the data in German
-    item = await client.index_by_id(
-        index="Item", 
-        content_id=23575, 
-        columns=["ID", "Name", "Icon", "ItemUICategory.Name"], 
-        language="de"
-    )
+Please make sure:
 
-    filters = [
-        Filter("ClassJobLevel", "gte", 0)
-    ]
+- All tests pass (`hatch run dev:test`)
+- Type checking passes (`hatch run dev:types`)
+- Linting passes (`hatch run dev:lint`)
+- Your changes are clearly described in the PR
+- Any relevant issues are referenced
 
-    # Get non-npc actions matching a given term (Defiance)
-    action = await client.index_search(
-        name="Defiance", 
-        indexes=["Action", "PvPAction", "CraftAction"], 
-        columns=["ID", "Name", "Icon", "Description", "ClassJobCategory.Name", "ClassJobLevel", "ActionCategory.Name"], 
-        filters=filters,
-        string_algo="match"
-    )
+If you want to discuss an idea before implementing it, feel free to open an issue.
 
-    # Search ingame data for matches against a given query. Includes item, minion, mount & achievement descriptions, quest dialog & more.
-    lore = await client.lore_search(
-        query="Shiva",
-        language="fr"
-    )
+## License
 
-    # Search for an item using specific filters
-    filters = [
-        Filter("LevelItem", "gte", 100)
-    ]
+`pyxivapi` is distributed under the terms of the [MIT](https://spdx.org/licenses/MIT.html) license.
 
-    sort = Sort("LevelItem", True)
-
-    item = await client.index_search(
-        name="Omega Rod", 
-        indexes=["Item"], 
-        columns=["ID", "Name", "Icon", "Description", "LevelItem"],
-        filters=filters,
-        sort=sort,
-        language="de"
-    )
-
-    await client.session.close()
-
-
-if __name__ == '__main__':
-    logging.basicConfig(level=logging.INFO, format='%(message)s', datefmt='%H:%M')
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(fetch_example_results())
+```
 
 ```
