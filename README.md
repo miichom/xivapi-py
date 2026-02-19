@@ -92,7 +92,3 @@ If you want to discuss an idea before implementing it, feel free to open an issu
 ## License
 
 `pyxivapi` is distributed under the terms of the [MIT](https://spdx.org/licenses/MIT.html) license.
-
-```
-
-```
