@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import Dict, List, Optional, Union
+from typing import Dict, List, Optional, Union, Any, TypedDict, NotRequired
 from enum import Enum
 
 class VersionQuery(BaseModel):
@@ -114,7 +114,7 @@ class SearchResult(BaseModel):
     
     See: https://v2.xivapi.com/api/docs#model/searchresult
     """
-    fields: dict
+    fields: dict[str, Any]
     row_id: int
     """ID of this row."""
     score: float
@@ -170,7 +170,6 @@ class SheetQuery(BaseModel):
     rows: Optional[str] = None
     """
     Rows to fetch from the sheet, as a comma-separated list. Behavior is undefined if both `rows` and `after` are provided.
-    Regex pattern: `^\d+(:\d+)?(,\d+(:\d+)?)*$`
     """
     
 class SheetPath(BaseModel):
@@ -188,7 +187,7 @@ class RowResult(BaseModel):
     
     See: https://v2.xivapi.com/api/docs#model/rowresult
     """
-    fields: dict
+    fields: dict[str, Any]
     row_id: int
     """ID of this row."""
     subrow_id: Optional[int] = None
@@ -254,3 +253,19 @@ class VersionsResponse(BaseModel):
     """
     versions: List[VersionMetadata]
     """List of versions available in the API."""
+    
+class XIVAPIOptions(TypedDict,total=False):
+    version: NotRequired[str]
+    """
+    All API endpoints that serve data derived from game files accept a `version` parameter.
+    If omitted, the version `latest` will be used
+    
+    See: https://v2.xivapi.com/docs/guides/pinning/#game-versions
+    """
+    language: NotRequired[SchemaLanguage | str]
+    """
+    Sheets with user-facing strings are commonly localised into all the languages supported by the game client.
+    
+    See: https://v2.xivapi.com/docs/guides/sheets/#language
+    """
+    verbose: NotRequired[bool]

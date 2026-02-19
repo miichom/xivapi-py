@@ -1,4 +1,5 @@
-from typing import Any, Dict, Optional
+from typing import Optional, Unpack
+from pyxivapi.client import XIVAPIOptions
 from .models import (RowReaderQuery, SheetQuery, RowResponse, SheetResponse, ListResponse, SchemaSpecifier)
 from ..utils import request, CustomError
 
@@ -8,9 +9,9 @@ class Sheet:
     
     See: https://v2.xivapi.com/api/docs#tag/sheets
     """
-    def __init__(self, sheet: SchemaSpecifier, options: Optional[Dict[str, Any]] = None) -> None:
+    def __init__(self, sheet: SchemaSpecifier, **options: Unpack[XIVAPIOptions]) -> None:
         self.type = sheet
-        self.options = options or {}
+        self.options = XIVAPIOptions(**options)
     
     def get(self, row_id: str | int, params: Optional[RowReaderQuery] = None) -> RowResponse:
         """
@@ -20,7 +21,7 @@ class Sheet:
         """
         try:
             row_id = str(row_id)
-            return Sheets(self.options).get(self.type, row_id, params or RowReaderQuery())
+            return Sheets(**self.options).get(self.type, row_id, params or RowReaderQuery())
         except Exception as e:
             raise CustomError(str(e))
         
@@ -41,8 +42,8 @@ class Sheets:
     
     See: https://v2.xivapi.com/api/docs#tag/sheets
     """
-    def __init__(self, options: Optional[Dict[str, Any]] = None) -> None:
-        self.options = options or { "language": "en", "verbose": False }
+    def __init__(self, **options: Unpack[XIVAPIOptions]) -> None:
+        self.options = XIVAPIOptions(**options)
     
     def all(self) -> ListResponse:
         """List all known sheets."""

@@ -54,7 +54,7 @@ def client():
 
 # Version endpoint testing   
 def test_versions(client: XIVAPIClient):
-    versions = client.data["versions"]()
+    versions = client.versions()
     assert isinstance(versions, list)
     assert len(versions) > 0
     for v in versions:
@@ -63,19 +63,19 @@ def test_versions(client: XIVAPIClient):
      
 # Asset endpoint testing   
 def test_asset_get(client: XIVAPIClient):
-    assets = client.data["assets"]()
+    assets = client.assets()
     result = assets.get({ "path": "ui/icon/051000/051474_hr1.tex", "format": "png" })
     assert isinstance(result, (bytes, bytearray))
     assert len(result) > 0
     
 def test_asset_invalid_path(client: XIVAPIClient):
-    assets = client.data["assets"]()
+    assets = client.assets()
     with pytest.raises(CustomError):
         assets.get({ "path": "invalid/path/does/not/exist.tex", "format": "png" })
     
     
 def test_asset_map_invalid(client: XIVAPIClient):
-    assets = client.data["assets"]()
+    assets = client.assets()
     with pytest.raises(CustomError):
         assets.map({ "territory": "invalid", "index": "00", "version": "latest", "format": "png" })
     
@@ -109,7 +109,7 @@ def test_search_invalid_syntax(client: XIVAPIClient):
         
 # Sheet(s) endpoint testing
 def test_list_sheets(client: XIVAPIClient):
-    sheets = client.data["sheets"]()
+    sheets = client.sheets()
     result = sheets.all()
     assert result.sheets
     assert len(result.sheets) > 0
@@ -117,7 +117,7 @@ def test_list_sheets(client: XIVAPIClient):
         assert isinstance(s.name, str)
         
 def test_list_sheet_rows(client: XIVAPIClient):
-    sheets = client.data["sheets"]()
+    sheets = client.sheets()
     result = sheets.list("Item", { "limit": 5 })
     assert result.rows
     assert len(result.rows) > 0
@@ -126,25 +126,25 @@ def test_list_sheet_rows(client: XIVAPIClient):
         assert isinstance(r.fields, dict)
         
 def test_get_row_with_fields(client: XIVAPIClient):
-    sheets = client.data["sheets"]()
+    sheets = client.sheets()
     result = sheets.get("Item", "1", { "fields": "Name", "language": "en" })
     assert result.row_id == 1
     assert result.fields.get("Name") == "Gil"
 
 def test_get_row_with_field_list(client: XIVAPIClient):
-    sheets = client.data["sheets"]()
+    sheets = client.sheets()
     result = sheets.get("Item", "1", { "fields": ["Name", "LevelItem"], "language": "en" })
     assert result.row_id == 1
     assert "Name" in result.fields
     assert "LevelItem" in result.fields
 
 def test_list_nonexistent_sheet(client: XIVAPIClient):
-    sheets = client.data["sheets"]()
+    sheets = client.sheets()
     with pytest.raises(CustomError): sheets.list("NonExistentSheetThatDoesNotExist")
 
 # Custom options testing
 def test_custom_options():
-    client = XIVAPIClient({ "language": "ja", "verbose": True, "version": "latest" })
+    client = XIVAPIClient(language="ja",verbose=True,version="latest")
     result = client.items.get(1, { "fields": "Name" })
     assert result.row_id == 1
     assert result.fields.get("Name") == "ギル"
