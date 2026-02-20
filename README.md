@@ -19,11 +19,11 @@ from pyxivapi import XIVAPI
 # Basic instance
 xiv = XIVAPI()
 
-# With options
+# With custom options
 xiv_custom = XIVAPI(
-    version="7.0",   # specify game version
-    language="ja",   # ja, en, de, fr
-    verbose=True     # enable debug logging
+  version="7.0" # specify game version
+  language="ja" # ja, en, de, fr
+  verbose=True # enable debug logging
 )
 ```
 
