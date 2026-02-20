@@ -11,7 +11,7 @@ class CustomError(Exception):
         self.name = name or "XIVAPIError"
         self.message = message
         
-def request(*, path: str, params: Optional[Dict[str, Any]] = None, options: Optional[Dict[str, Any]] = None) -> Tuple[Dict[str, Any], Optional[list]]:
+def request(*, path: str, params: Optional[Dict[str, Any]] = None, options: Optional[Dict[str, Any]] = None) -> Tuple[Dict[str, Any], Optional[list[Any]]]:
     url = urljoin(endpoint, path.lstrip("/"))
     params = params or {}
     options = options or {}

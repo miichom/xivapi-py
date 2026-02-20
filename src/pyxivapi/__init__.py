@@ -1,4 +1,4 @@
-from .client import XIVAPIClient
+from .client import XIVAPI
 from .utils import CustomError
 
-__all__ = ["XIVAPIClient", "CustomError"]
+__all__ = ["XIVAPI", "CustomError"]

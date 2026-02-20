@@ -32,7 +32,7 @@ class Sheet:
         See: https://v2.xivapi.com/api/docs#tag/sheets/get/sheet/{sheet}
         """
         try:
-            return Sheets(self.options).list(self.type, params or SheetQuery())
+            return Sheets(**self.options).list(self.type, params or SheetQuery())
         except Exception as e:
             raise CustomError(str(e))
         
@@ -47,7 +47,7 @@ class Sheets:
     
     def all(self) -> ListResponse:
         """List all known sheets."""
-        data, errors = request(path="/sheet", params={}, options=self.options)
+        data, errors = request(path="/sheet", params={}, **self.options)
         if errors:
             raise CustomError(errors[0]["message"])
         return ListResponse(**data)

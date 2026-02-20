@@ -5,7 +5,7 @@ from .lib.assets import Assets
 from .lib.versions import Versions
 from .utils import request, CustomError
     
-class XIVAPIClient:
+class XIVAPI:
     """Python wrapper for the XIVAPI v2 API."""
     def __init__(self, **options: Unpack[XIVAPIOptions]) -> None:
         self.options = XIVAPIOptions(**options)

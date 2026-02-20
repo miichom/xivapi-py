@@ -103,7 +103,7 @@ class RowReaderQuery(BaseModel):
     """Comma-separated list of field paths to select."""
     language: Optional[Union[str, SchemaLanguage]] = None
     """Language to read row data with."""
-    schema: Optional[SchemaSpecifier] = None
+    schema: Optional[SchemaSpecifier] = None # pyright: ignore[reportIncompatibleMethodOverride]
     """Schema specifier for row data."""
     transient: Optional[FilterString] = None
     """Transient row field selection."""
@@ -126,7 +126,7 @@ class SearchResult(BaseModel):
     """Excel sheet this result was found in."""
     subrow_id: Optional[int] = None
     """Subrow ID of this row, when relevant."""
-    transient: Optional[dict] = None
+    transient: Optional[dict[str, Any]] = None
     """Field values for this row's transient row, if any is present, according to the current schema and transient filter."""    
     
 class SearchResponse(BaseModel):
@@ -136,7 +136,7 @@ class SearchResponse(BaseModel):
     See: https://v2.xivapi.com/api/docs#model/searchresponse
     """
     results: List[SearchResult]
-    schema: SchemaSpecifier
+    schema: SchemaSpecifier # pyright: ignore[reportIncompatibleMethodOverride]
     next: Optional[str] = None
  
 class SheetMetadata(BaseModel):
@@ -192,7 +192,7 @@ class RowResult(BaseModel):
     """ID of this row."""
     subrow_id: Optional[int] = None
     """Subrow ID of this row, when relevant."""
-    transient: Optional[dict] = None
+    transient: Optional[dict[str, Any]] = None
     """Field values for this row's transient row, if any is present, according to the current schema and transient filter."""
     
 class SheetResponse(BaseModel):
@@ -207,7 +207,7 @@ class SheetResponse(BaseModel):
     
     See: https://v2.xivapi.com/api/docs#model/rowresult
     """
-    schema: SchemaSpecifier
+    schema: SchemaSpecifier # type: ignore - schema exists on BaseModel
     """The canonical specifier for the schema used in this response."""
     
 class RowPath(BaseModel):
@@ -226,14 +226,14 @@ class RowResponse(BaseModel):
     
     See: https://v2.xivapi.com/api/docs#model/rowresponse
     """
-    fields: dict
+    fields: dict[str, Any]
     row_id: int
     """ID of this row."""
-    schema: SchemaSpecifier
+    schema: SchemaSpecifier # pyright: ignore[reportIncompatibleMethodOverride]
     """The canonical specifier for the schema used in this response."""
     subrow_id: Optional[int] = None
     """Subrow ID of this row, when relevant."""
-    transient: Optional[dict] = None
+    transient: Optional[dict[str, Any]] = None
     """Field values for this row's transient row, if any is present, according to the current schema and transient filter."""
     
 class VersionMetadata(BaseModel):
