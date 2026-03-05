@@ -32,9 +32,9 @@ dependencies = [
 ]
 
 [project.urls]
-Documentation = "https://github.com/miichom/pyxivapi#readme"
-Issues = "https://github.com/miichom/pyxivapi/issues"
-Source = "https://github.com/miichom/pyxivapi"
+Documentation = "https://github.com/xivapi/xivapi-py#readme"
+Issues = "https://github.com/xivapi/xivapi-py/issues"
+Source = "https://github.com/xivapi/xivapi-py"
 
 [tool.hatch.envs.dev]
 dependencies = [

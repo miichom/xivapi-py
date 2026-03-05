@@ -64,8 +64,8 @@ Contributions of any kind are welcome - bug fixes, improvements, new features, o
 ### Getting Started
 
 ```bash
-git clone https://github.com/miichom/pyxivapi.git
-cd pyxivapi
+git clone https://github.com/xivapi/xivapi-py.git
+cd xivapi-py
 hatch env create dev
 ```
 
