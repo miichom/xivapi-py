@@ -1,4 +1,4 @@
-from typing import Dict, Any
+from typing_extensions import Dict, Any, cast
 from .models import AssetQuery, MapPath, VersionQuery
 from ..utils import request, CustomError
 
@@ -15,11 +15,11 @@ class Assets:
         See: https://v2.xivapi.com/api/docs#tag/assets/get/asset
         """
         if isinstance(params, dict):
-            params = AssetQuery(**params)
+            params = AssetQuery(**params) # pyright: ignore[reportUnknownArgumentType]
         data, errors = request(path="/asset", params=params.model_dump(exclude_none=True))
         if errors:
             raise CustomError(errors[0]["message"])
-        return data.get("data", data)
+        return cast(bytes, data.get("data", data))
     
     def map(self, params: MapPath | VersionQuery | Dict[str, Any]) -> bytes:
         """
@@ -30,7 +30,7 @@ class Assets:
         if isinstance(params, dict):
             # MapPath + VersionQuery + {"format": ...}
             params = {k: v for k, v in params.items()}
-        data, errors = request(path="/asset",params=params)
+        data, errors = request(path="/asset", params=dict(params)) # pyright: ignore[reportArgumentType]
         if errors:
             raise CustomError(errors[0]["message"])
-        return data.get("data", data)
+        return cast(bytes, data.get("data", data))

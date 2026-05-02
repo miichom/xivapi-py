@@ -1,6 +1,6 @@
 import requests
 from urllib.parse import urlencode, urljoin
-from typing import Any, Dict, Optional, Tuple
+from typing_extensions import Any, Dict, Optional, Tuple
 
 # The endpoint to use, kept at the top for quick changing (if needed)
 endpoint = "https://v2.xivapi.com/api/"
@@ -55,6 +55,6 @@ def request(*, path: str, params: Optional[Dict[str, Any]] = None, options: Opti
     try:
         error_json = response.json()
     except Exception:
-        error_json = { "message": "Unknown error", "code": response.status_code }
+        error_json = { "message": "Unknown error", "code": response.status_code } # pyright: ignore[reportUnknownVariableType]
         
     return {}, [error_json]

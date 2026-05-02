@@ -1,10 +1,10 @@
-from typing import Any, Dict, Unpack
+from typing_extensions import Any, Dict, Unpack
 from .lib.models import (SearchQuery, VersionQuery, RowReaderQuery, SearchResponse, XIVAPIOptions)
 from .lib.sheets import Sheet, Sheets
 from .lib.assets import Assets
 from .lib.versions import Versions
 from .utils import request, CustomError
-    
+
 class XIVAPI:
     """Python wrapper for the XIVAPI v2 API."""
     def __init__(self, **options: Unpack[XIVAPIOptions]) -> None:
@@ -29,7 +29,7 @@ class XIVAPI:
         """
         if isinstance(params, dict):
             params = SearchQuery(**params)
-        data, errors = request(path="/search", params=params.model_dump(exclude_none=True), options=self.options)
+        data, errors = request(path="/search", params=params.model_dump(exclude_none=True), options=dict(self.options)) # pyright: ignore[reportArgumentType]
         if errors:
             raise CustomError(errors[0]["message"])
         return SearchResponse(**data)

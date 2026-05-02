@@ -1,7 +1,6 @@
+from typing_extensions import Dict, List, Optional, Union, Any, TypedDict, NotRequired
 from pydantic import BaseModel
-from typing import Dict, List, Optional, Union, Any, TypedDict, NotRequired
 from enum import Enum
-
 class VersionQuery(BaseModel):
     """
     Query parameters accepted by endpoints that interact with versioned game data.
@@ -207,7 +206,7 @@ class SheetResponse(BaseModel):
     
     See: https://v2.xivapi.com/api/docs#model/rowresult
     """
-    schema: SchemaSpecifier # type: ignore - schema exists on BaseModel
+    schema: SchemaSpecifier # pyright: ignore[reportIncompatibleMethodOverride]
     """The canonical specifier for the schema used in this response."""
     
 class RowPath(BaseModel):

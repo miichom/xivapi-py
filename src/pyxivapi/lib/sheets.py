@@ -1,6 +1,5 @@
-from typing import Optional, Unpack
-from pyxivapi.client import XIVAPIOptions
-from .models import (RowReaderQuery, SheetQuery, RowResponse, SheetResponse, ListResponse, SchemaSpecifier)
+from typing_extensions import Optional, Unpack
+from .models import (RowReaderQuery, SheetQuery, RowResponse, SheetResponse, ListResponse, SchemaSpecifier, XIVAPIOptions)
 from ..utils import request, CustomError
 
 class Sheet:
@@ -47,29 +46,27 @@ class Sheets:
     
     def all(self) -> ListResponse:
         """List all known sheets."""
-        data, errors = request(path="/sheet", params={}, **self.options)
+        data, errors = request(path="/sheet", params={}, options=dict(self.options)) # pyright: ignore[reportUnknownVariableType, reportCallIssue]
         if errors:
-            raise CustomError(errors[0]["message"])
-        return ListResponse(**data)
+            raise CustomError(errors[0]["message"]) # pyright: ignore[reportUnknownArgumentType]
+        return ListResponse(**data) # pyright: ignore[reportUnknownArgumentType]
     
     def list(self, sheet: SchemaSpecifier, params: Optional[SheetQuery] = None) -> SheetResponse:
         """Fetch multiple rows from a sheet."""
-        if params is None:
-            params = SheetQuery()
-        elif isinstance(params, dict):
-            params = SheetQuery(**params)
-        data, errors = request(path=f"/sheet/{sheet}", params=params.model_dump(exclude_none=True), options=self.options)
+        params = SheetQuery() if params is None else params
+        if isinstance(params, dict):
+            params = SheetQuery(**params) # pyright: ignore[reportUnknownArgumentType]
+        data, errors = request(path=f"/sheet/{sheet}", params=params.model_dump(exclude_none=True), options=dict(self.options)) # pyright: ignore[reportArgumentType]
         if errors:
             raise CustomError(errors[0]["message"])
         return SheetResponse(**data)
     
     def get(self, sheet: SchemaSpecifier, row: str, params: Optional[RowReaderQuery] = None) -> RowResponse:
         """Fetch a single row from a sheet."""
-        if params is None:
-            params = SheetQuery()
-        elif isinstance(params, dict):
-            params = SheetQuery(**params)
-        data, errors = request(path=f"/sheet/{sheet}/{row}", params=params.model_dump(exclude_none=True), options=self.options)
+        params = RowReaderQuery() if params is None else params
+        if isinstance(params, dict):
+            params = RowReaderQuery(**params) # pyright: ignore[reportUnknownArgumentType]
+        data, errors = request(path=f"/sheet/{sheet}/{row}", params=params.model_dump(exclude_none=True), options=dict(self.options)) # pyright: ignore[reportArgumentType, reportOptionalMemberAccess]
         if errors:
             raise CustomError(errors[0]["message"])
         return RowResponse(**data)
