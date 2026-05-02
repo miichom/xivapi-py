@@ -67,6 +67,7 @@ Contributions of any kind are welcome - bug fixes, improvements, new features, o
 ```bash
 git clone https://github.com/xivapi/xivapi-py.git
 cd xivapi-py
+pip install hatch # if you don't have it already
 hatch env create dev
 ```
 
