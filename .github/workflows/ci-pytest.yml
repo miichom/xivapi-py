@@ -16,17 +16,16 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -e .
-          pip install types-requests pytest pytest-cov mypy ruff
+      - name: Install Hatch
+        run: pip install --upgrade hatch
+      - name: Install dependencies with Hatch
+        run: hatch env run --env-name dev pip install --upgrade pip
       - name: Lint with Ruff
-        run: ruff check src/pyxivapi
+        run: hatch run dev:lint
       - name: Type check with mypy
-        run: mypy src/pyxivapi
+        run: hatch run dev:types
       - name: Run tests
-        run: pytest -v --cov=pyxivapi --cov-report=xml
+        run: hatch run dev:test
       - name: Upload coverage report
         uses: actions/upload-artifact@v4
         with:
