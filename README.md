@@ -2,6 +2,7 @@
 
 [![PyPI - Version](https://img.shields.io/pypi/v/pyxivapi.svg)](https://pypi.org/project/pyxivapi)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/pyxivapi.svg)](https://pypi.org/project/pyxivapi)
+[![CI Pytest](https://github.com/miichom/xivapi-py/actions/workflows/ci-pytest.yml/badge.svg)](https://github.com/miichom/xivapi-py/actions/workflows/ci-pytest.yml)
 
 An asynchronous Python client library for working with [XIVAPI v2](https://v2.xivapi.com/), providing access to Final Fantasy XIV game data. It lets you fetch, search, and work with FFXIV data using a clean, modern Python interface.
 
