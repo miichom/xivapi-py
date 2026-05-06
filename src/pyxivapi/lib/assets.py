@@ -1,5 +1,5 @@
 from typing_extensions import Dict, Any, cast
-from .models import AssetQuery, MapPath, VersionQuery
+from .models import AssetQuery, VersionQuery
 from ..utils import request, CustomError
 
 class Assets:
@@ -21,7 +21,7 @@ class Assets:
             raise CustomError(errors[0]["message"])
         return cast(bytes, data.get("data", data))
     
-    def map(self, params: MapPath | VersionQuery | Dict[str, Any]) -> bytes:
+    def map(self, territory: str, index: str, params: VersionQuery | Dict[str, Any]) -> bytes:
         """
         Retrieve the specified map, composing it from split source files if necessary (`GET /asset/map`).
 
@@ -30,7 +30,7 @@ class Assets:
         if isinstance(params, dict):
             # MapPath + VersionQuery + {"format": ...}
             params = {k: v for k, v in params.items()}
-        data, errors = request(path="/asset", params=dict(params)) # pyright: ignore[reportArgumentType]
+        data, errors = request(path=f"/asset/map/{territory}/{index}", params=dict(params)) # pyright: ignore[reportArgumentType]
         if errors:
             raise CustomError(errors[0]["message"])
         return cast(bytes, data.get("data", data))

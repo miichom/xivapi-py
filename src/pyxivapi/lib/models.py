@@ -36,25 +36,6 @@ class ErrorResponse(BaseModel):
     code: int
     message: str
     """Description of what went wrong."""
-
-# status code
-
-class MapPath(BaseModel):
-    """
-    Path segments expected by the asset map endpoint.
-    
-    See: https://v2.xivapi.com/api/docs#model/mappath
-    """
-    index: str
-    """
-    Index of the map within the territory. This invariably takes the form of a two-digit zero-padded number. See Map's Id field for examples of possible combinations of `territory` and `index`.
-    E.g. `00`
-    """
-    territory: str
-    """
-    Territory of the map to be retrieved. This typically takes the form of 4 characters, `[letter][number][letter][number]`. See Map's Id field for examples of possible combinations of `territory` and `index`.
-    E.g. `s1d1`
-    """
     
 QueryString = Union[str, List[str], Dict[str,str|int|bool], None]
     

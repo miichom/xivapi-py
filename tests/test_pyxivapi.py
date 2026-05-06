@@ -73,11 +73,16 @@ def test_asset_invalid_path(client: XIVAPI):
     with pytest.raises(CustomError):
         assets.get({ "path": "invalid/path/does/not/exist.tex", "format": "png" })
     
+def test_asset_map(client: XIVAPI):
+    assets = client.assets()
+    result = assets.map("s1d1", "00", { "version": "latest" })
+    assert isinstance(result, (bytes, bytearray))
+    assert len(result) > 0
     
 def test_asset_map_invalid(client: XIVAPI):
     assets = client.assets()
     with pytest.raises(CustomError):
-        assets.map({ "territory": "invalid", "index": "00", "version": "latest", "format": "png" })
+        assets.map("invalid", "00", { "version": "latest" })
     
 # Search endpoint testing
 def test_search_exact_name(client: XIVAPI):
